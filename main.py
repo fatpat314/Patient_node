@@ -55,7 +55,14 @@ def home():
 
 @app.route('/register', methods=['POST'])
 def register():
-    return register_data(request)
+    new_patient_id = register_data(request)
+    event_url = get_event_server()
+    event_url = event_url['url']
+    event_url = f'{event_url}/event-patient-register'
+    data = {'patient_id': new_patient_id}
+    print("event", event_url)
+    event_response = requests.post(event_url, json=data)
+    return('hi')
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
@@ -66,6 +73,11 @@ def login():
 def profile():
     patient = Patient()
     return profile_data(cloud_url, patient)
+
+def get_event_server():
+    event_url = f'{cloud_url}/event_server'
+    response = requests.get(event_url)
+    return response.json()
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()

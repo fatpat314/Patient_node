@@ -16,8 +16,8 @@ def register_data(request):
     url = 'http://localhost:6000/register'
     data = {'first_name': first_name, 'last_name':last_name, 'username': username,'password': password, 'email': email, 'DOB': DOB, 'location': location}
     response = requests.post(url, json=data)
-    # print('REGISTER:', response)
-    return("hi")
+    print('REGISTER:', response.json())
+    return(response.json())
 
 # def location_data(request):
 #     data = request.get_json()
