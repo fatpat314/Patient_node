@@ -4,6 +4,7 @@ from dotenv import load_dotenv
 from flask import Flask, jsonify, request, session, g
 from flask_jwt_extended import JWTManager, jwt_required, \
                                create_access_token
+from flask_cors import CORS
 import requests, names, random, threading, uuid, json
 import argparse
 
@@ -12,8 +13,11 @@ from login import login_data
 from profile import profile_data
 
 app = Flask(__name__)
+CORS(app)
+
 app.config['JWT_SECRET_KEY'] = config.JWT_SECRET_KEY # change this to a random string in production
-cloud_url = "http://localhost:6000"
+cloud_url = "http://localhost:8010"
+# cloud_url = "https://cognitive-network-manager-rdwl5upzra-uw.a.run.app"
 jwt = JWTManager(app)
 load_dotenv()
 
@@ -50,12 +54,12 @@ class Patient:
 @app.route('/', methods = ['GET'])
 def home():
     if(request.method == 'GET'):
-        data = "hello Class!"
+        data = "Patient Node"
         return jsonify({'data': data})
 
 @app.route('/register', methods=['POST'])
 def register():
-    new_patient_id = register_data(request)
+    new_patient_id = register_data(request, cloud_url)
     event_url = get_event_server()
     event_url = event_url['url']
     event_url = f'{event_url}/event-patient-register'

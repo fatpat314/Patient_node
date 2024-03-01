@@ -2,7 +2,7 @@ from flask import request
 import requests
 
 
-def register_data(request):
+def register_data(request, cloud_url):
     # This repeats in the CNM
     data = request.get_json()
     first_name = data['first_name']
@@ -13,7 +13,7 @@ def register_data(request):
     DOB = data['DOB']
     location = data['location']
 
-    url = 'http://localhost:6000/register'
+    url = f'{cloud_url}/register'
     data = {'first_name': first_name, 'last_name':last_name, 'username': username,'password': password, 'email': email, 'DOB': DOB, 'location': location}
     response = requests.post(url, json=data)
     print('REGISTER:', response.json())
